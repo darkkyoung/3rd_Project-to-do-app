@@ -32,7 +32,7 @@ function render() {
             <button>Delete</button>
         </div>
     </div>`;
-    }
+    } //${}는 EL로 html 문법을 자바에서 실행하는 듯
 
     document.getElementById("task_board").innerHTML = resultHTML;
 }
