@@ -39,7 +39,7 @@ function render() {
             <div class="task_done">${taskList[i].taskContent}</div>
             <div>
                 <button onclick="toggleComplete('${taskList[i].id}')">Check</button>
-                <button onclick="deleteTask()">Delete</button>
+                <button onclick="deleteTask('${taskList[i].id}')">Delete</button>
             </div>
         </div>`;
         } else {
@@ -47,7 +47,7 @@ function render() {
             <div>${taskList[i].taskContent}</div>
             <div>
                 <button onclick="toggleComplete('${taskList[i].id}')">Check</button>
-                <button onclick="deleteTask()">Delete</button>
+                <button onclick="deleteTask('${taskList[i].id}')">Delete</button>
             </div>
         </div>`;
         }
@@ -67,8 +67,14 @@ function toggleComplete(id) {
     console.log(taskList);
 }
 
-function deleteTask() {
-    
+function deleteTask(id) {
+    for (let i = 0; i < taskList.length; i++) {
+        if (taskList[i].id == id) {
+            taskList.splice(i,1);
+            break;
+        }
+    }
+    render(); //실제 UI에서 삭제되는 걸 구현 + 어떤 걸 하면 반드시 render 해줘야 함.
 }
 
 function generateRandomID() {
