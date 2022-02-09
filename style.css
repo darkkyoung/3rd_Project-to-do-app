@@ -44,3 +44,7 @@ body {
 .task_done {
     text-decoration: line-through;
 }
+
+.task_tabs div {
+    cursor: pointer;
+}

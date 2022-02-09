@@ -14,7 +14,39 @@ Done은 끝난 것만, Not Yet은 진행 중인 것만
 
 let taskInput = document.getElementById("task_input");
 let addButton = document.getElementById("add_button");
+let tabs = document.querySelectorAll(".task_tabs div")
 let taskList = []; //할 일을 추가하기 위해 어레이 생성
+let filterList = [];
+let mode = "all";
+
+for (let i = 1; i < tabs.length; i++) {
+    //0은 밑줄이기 때문에 i=1부터
+    tabs[i].addEventListener("click", function(event){filter(event)})
+
+}
+
+function filter(event) {
+    mode = event.target.id;
+    //event는 클릭에 관해서 모든 상황을 알려줌. event.target은 클릭한 것의 정확한 걸 알려줌
+    if (mode == "all") {
+        render();
+    } else if (mode == "not_yet") {
+        for (let i = 0; i < taskList.length; i++) {
+            if (taskList[i].isComplete == false) {
+                filterList.push(taskList[i]);
+            }
+        }
+        //taskList = filterList; 이러면 다시 all로 못 돌아감
+        render();
+    } else if (mode == "done") {
+        for (let i = 0; i < taskList.length; i++) {
+            if (taskList[i].isComplete == true) {
+                filterList.push(taskList[i]);
+            }
+        }
+        render();
+    }
+}
 
 addButton.addEventListener("click", addTask);
 
@@ -32,22 +64,29 @@ function addTask() {
 }
 
 function render() {
+    let list = []; //이것으로 all 탭에서 not yet 탭으로 왕복 가능
+    if (mode == "all") {
+        list = taskList;
+    } else if (mode == "not_yet" || mode == "done") {
+        list = filterList;
+    }
+
     let resultHTML = '';
-    for (let i = 0; i < taskList.length; i++) {
-        if (taskList[i].isComplete == true) {
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].isComplete == true) {
             resultHTML += `<div class="task">
-            <div class="task_done">${taskList[i].taskContent}</div>
+            <div class="task_done">${list[i].taskContent}</div>
             <div>
-                <button onclick="toggleComplete('${taskList[i].id}')">Check</button>
-                <button onclick="deleteTask('${taskList[i].id}')">Delete</button>
+                <button onclick="toggleComplete('${list[i].id}')">Check</button>
+                <button onclick="deleteTask('${list[i].id}')">Delete</button>
             </div>
         </div>`;
         } else {
             resultHTML += `<div class="task">
-            <div>${taskList[i].taskContent}</div>
+            <div>${list[i].taskContent}</div>
             <div>
-                <button onclick="toggleComplete('${taskList[i].id}')">Check</button>
-                <button onclick="deleteTask('${taskList[i].id}')">Delete</button>
+                <button onclick="toggleComplete('${list[i].id}')">Check</button>
+                <button onclick="deleteTask('${list[i].id}')">Delete</button>
             </div>
         </div>`;
         }
